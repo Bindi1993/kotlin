@@ -459,6 +459,29 @@ public class CompileKotlinAgainstKotlinTestGenerated extends AbstractCompileKotl
                     runTest("compiler/testData/compileKotlinAgainstKotlin/jvm8/defaults/allCompatibility/superPropAccessFromInterface2.kt");
                 }
             }
+
+            @TestMetadata("compiler/testData/compileKotlinAgainstKotlin/jvm8/defaults/interop")
+            @TestDataPath("$PROJECT_ROOT")
+            @RunWith(JUnit3RunnerWithInners.class)
+            public static class Interop extends AbstractCompileKotlinAgainstKotlinTest {
+                private void runTest(String testDataFilePath) throws Exception {
+                    KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
+                }
+
+                public void testAllFilesPresentInInterop() throws Exception {
+                    KotlinTestUtils.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("compiler/testData/compileKotlinAgainstKotlin/jvm8/defaults/interop"), Pattern.compile("^(.+)\\.kt$"), null, true);
+                }
+
+                @TestMetadata("oldScheme.kt")
+                public void testOldScheme() throws Exception {
+                    runTest("compiler/testData/compileKotlinAgainstKotlin/jvm8/defaults/interop/oldScheme.kt");
+                }
+
+                @TestMetadata("oldScheme2.kt")
+                public void testOldScheme2() throws Exception {
+                    runTest("compiler/testData/compileKotlinAgainstKotlin/jvm8/defaults/interop/oldScheme2.kt");
+                }
+            }
         }
 
         @TestMetadata("compiler/testData/compileKotlinAgainstKotlin/jvm8/jvm8against6")
