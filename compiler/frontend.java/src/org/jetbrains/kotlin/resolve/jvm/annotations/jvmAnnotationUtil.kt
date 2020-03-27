@@ -48,14 +48,8 @@ fun DeclarationDescriptor.hasJvmFieldAnnotation(): Boolean =
 fun DeclarationDescriptor.isCallableMemberCompiledToJvmDefaultIfNoAbstract(jvmDefault: JvmDefaultMode): Boolean =
     this is CallableMemberDescriptor && isCompiledToJvmDefaultIfNoAbstract(jvmDefault)
 
-fun CallableMemberDescriptor.isCompiledToJvmDefaultIfNoAbstract(jvmDefault: JvmDefaultMode): Boolean {
-    val directMember = DescriptorUtils.getDirectMember(this)
-    val clazz = directMember.containingDeclaration
-
-    if (directMember.annotations.hasAnnotation(JVM_DEFAULT_FQ_NAME)) return true
-    if (clazz !is DeserializedClassDescriptor) return jvmDefault.forAllMehtodsWithBody
-    return JvmProtoBufUtil.isNewPlaceForBodyGeneration(clazz.classProto)
-}
+fun CallableMemberDescriptor.isCompiledToJvmDefaultIfNoAbstract(jvmDefault: JvmDefaultMode): Boolean =
+    jvmDefault.forAllMehtodsWithBody || DescriptorUtils.getDirectMember(this).annotations.hasAnnotation(JVM_DEFAULT_FQ_NAME)
 
 fun CallableMemberDescriptor.hasJvmDefaultAnnotation(): Boolean =
     DescriptorUtils.getDirectMember(this).annotations.hasAnnotation(JVM_DEFAULT_FQ_NAME)
